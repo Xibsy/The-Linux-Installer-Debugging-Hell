@@ -1,5 +1,1 @@
 print('Hello Igor')
-print('Hello Igor')
-print('Hello Igor')
-print('Hello Igor')
-print('Hello Igor')
