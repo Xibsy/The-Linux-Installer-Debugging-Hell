@@ -6,7 +6,7 @@ from attrs import define, field
 
 from sprite import Sprite, SPRITES_FOLDER
 from observer import Event, OnEventSubscriber
-from vector import Vector2Int
+from mathematics.vector import Vector2Int
 
 
 @define

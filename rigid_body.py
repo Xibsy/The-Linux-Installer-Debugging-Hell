@@ -1,4 +1,4 @@
-from mathematics.mathematics import sign
+# from mathematics.mathematics import sign
 
 from attrs import define
 
@@ -61,3 +61,21 @@ class RigidBody(proto.RigidBody):
 
         self._position += delta_position
         self._velocity += delta_velocity
+
+    def constrain_to_screen(self, screen_width: float, screen_height: float) -> None:
+        x, y = self._position.tuple
+        w, h = self._shape.tuple
+
+        if x < 0:
+            self._position = Vector2(0, y)
+            self._velocity = Vector2(0, self._velocity.y)
+        elif x + w > screen_width:
+            self._position = Vector2(screen_width - w, y)
+            self._velocity = Vector2(0, self._velocity.y)
+
+        if y < 0:
+            self._position = Vector2(x, 0)
+            self._velocity = Vector2(self._velocity.x, 0)
+        elif y + h > screen_height:
+            self._position = Vector2(x, screen_height - h)
+            self._velocity = Vector2(self._velocity.x, 0)
