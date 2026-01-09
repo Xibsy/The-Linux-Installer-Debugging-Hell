@@ -24,8 +24,10 @@ class GameEngine(arcade.Window):
         return self._player_inputer
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
-        self._player_inputer.pressed_keys.add(symbol)
-        self._player_inputer.keyboard_state.invoke(self._player_inputer.pressed_keys)
+        self._player_inputer.register_press(symbol)
+
+    def on_key_release(self, symbol: int, modifiers: int) -> None:
+        self._player_inputer.unregister_press(symbol)
 
     def on_fixed_update(self, delta_time: float) -> None:
         self._player.update(delta_time)

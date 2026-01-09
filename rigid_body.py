@@ -10,7 +10,7 @@ import protocols as proto
 class RigidBody(proto.RigidBody):
     _position: Vector2
     _velocity: Vector2
-    _max_speed: Vector2
+    _max_speed: int
 
     _shape: Vector2
 
