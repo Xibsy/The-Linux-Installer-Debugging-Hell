@@ -1,6 +1,6 @@
 from attrs import define, field
 import protocols as proto
-from constants import ACCELERATION, MAX_SPEED
+from constants import ACCELERATION, MAX_SPEED, DRAG_RATION
 from mathematics.vector import Vector2
 
 
@@ -22,9 +22,13 @@ class Player(proto.Player):
         self._direction = direction
 
     def update(self, dt: float):
-        velocity = self._rigid_body.velocity
-        acceleration = (self._direction * ACCELERATION if velocity.length < MAX_SPEED else Vector2.zero())
+        acceleration = self._direction * ACCELERATION
+        acceleration -= self._rigid_body.velocity * DRAG_RATION
         self._rigid_body.update(acceleration, dt)
+
+        velocity = self._rigid_body.velocity
+        if velocity.length > MAX_SPEED:
+            self._rigid_body.set_velocity(velocity.normalize * MAX_SPEED)
 
 
 
