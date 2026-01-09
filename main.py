@@ -9,7 +9,7 @@ from rigid_body import RigidBody
 
 
 def main() -> None:
-    player = Player(RigidBody(const.SCREEN_SHAPE.with_x(100).as_vector2 * .5, Vector2.zero(), const.MAX_SPEED,
+    player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(), const.MAX_SPEED,
                               const.SHAPE))
 
     engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(), player)

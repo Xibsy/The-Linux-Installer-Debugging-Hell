@@ -1,12 +1,14 @@
 import arcade
 from attrs import define
 import protocols as proto
-from constants import PLAYER_COLOR
 
 
 @define
 class Draw:
-    def player(self, player: proto.Player) -> None:
+    def player(self, player: proto.Player, player_sprite: arcade.Sprite) -> None:
         position = player.rigid_body.position
-        rect = arcade.rect.LBWH(*position.tuple, *player.rigid_body.shape.tuple)
-        arcade.draw_rect_filled(rect, PLAYER_COLOR)
+        player_sprite.center_x = position.x - player.rigid_body.shape.x
+        player_sprite.center_y = position.y - player.rigid_body.shape.y
+        player_sprite_list = arcade.SpriteList()
+        player_sprite_list.append(player_sprite)
+        player_sprite_list.draw()

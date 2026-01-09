@@ -1,5 +1,4 @@
 from attrs import define
-
 from mathematics.vector import Vector2
 from observer import Event, OnEventSubscriber
 

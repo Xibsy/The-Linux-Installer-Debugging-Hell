@@ -1,6 +1,6 @@
+import math
 import arcade
-
-from mathematics.vector import Vector2Int, Vector2
+from mathematics.vector import Vector2Int
 from draw import Draw
 import protocols as proto
 from player_inputer import PlayerInputer
@@ -19,6 +19,9 @@ class GameEngine(arcade.Window):
 
         self._player_inputer = PlayerInputer()
 
+        self._player_sprite_path = 'sprites/player.png'
+        self._player_sprite = arcade.Sprite(self._player_sprite_path)
+
     @property
     def player_inputer(self) -> PlayerInputer:
         return self._player_inputer
@@ -29,10 +32,17 @@ class GameEngine(arcade.Window):
     def on_key_release(self, symbol: int, modifiers: int) -> None:
         self._player_inputer.unregister_press(symbol)
 
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int) -> None:
+        diff_x = x - self._player.rigid_body.position.x
+        diff_y = y - self._player.rigid_body.position.y
+        angle_rad = math.atan2(diff_x, diff_y)
+        a = math.degrees(angle_rad)
+        self._player_sprite.angle = a
+
     def on_fixed_update(self, delta_time: float) -> None:
         self._player.update(delta_time)
 
     def on_draw(self) -> None:
         self.clear()
-        self._draw.player(self._player)
+        self._draw.player(self._player, self._player_sprite)
 
