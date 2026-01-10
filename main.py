@@ -5,14 +5,14 @@ from player import Player
 from draw import Draw
 from mathematics.vector import Vector2
 from game_engine import GameEngine
+from player_draw import PlayerDraw
 from rigid_body import RigidBody
 
 
 def main() -> None:
-    player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(), const.MAX_SPEED,
-                              const.SHAPE))
+    player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(), const.MAX_SPEED))
 
-    engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(), player)
+    engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(PlayerDraw(player)), player)
 
     engine.player_inputer.keyboard_state_changed.subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys)))
 

@@ -12,8 +12,6 @@ class RigidBody(proto.RigidBody):
     _velocity: Vector2
     _max_speed: int
 
-    _shape: Vector2
-
     @property
     def position(self) -> Vector2:
         return self._position
@@ -21,33 +19,6 @@ class RigidBody(proto.RigidBody):
     @property
     def velocity(self) -> Vector2:
         return self._velocity
-
-    @property
-    def shape(self) -> Vector2:
-        return self._shape
-
-    def is_contain(self, point: Vector2) -> bool:
-        x, y = self.position.tuple
-        width, height = self.shape.tuple
-        return ((x <= point.x <= x + width) and
-                (y <= point.y <= y + height))
-
-    def is_collided_with(self, other: "RigidBody", _is_inner=False) -> bool:
-        x, y = self.position.tuple
-        width, height = self.shape.tuple
-        corners = [
-            Vector2(x, y),
-            Vector2(x + width, y),
-            Vector2(x, y + height),
-            Vector2(x + width, y + height),
-        ]
-        result = any(other.is_contain(point) for point in corners)
-        if result:
-            return True
-        if not _is_inner:
-            return other.is_collided_with(self, _is_inner=True)
-        return False
-
 
     def set_position(self, position: Vector2) -> None:
         self._position = position
@@ -61,21 +32,3 @@ class RigidBody(proto.RigidBody):
 
         self._position += delta_position
         self._velocity += delta_velocity
-
-    def constrain_to_screen(self, screen_width: float, screen_height: float) -> None:
-        x, y = self._position.tuple
-        w, h = self._shape.tuple
-
-        if x < 0:
-            self._position = Vector2(0, y)
-            self._velocity = Vector2(0, self._velocity.y)
-        elif x + w > screen_width:
-            self._position = Vector2(screen_width - w, y)
-            self._velocity = Vector2(0, self._velocity.y)
-
-        if y < 0:
-            self._position = Vector2(x, 0)
-            self._velocity = Vector2(self._velocity.x, 0)
-        elif y + h > screen_height:
-            self._position = Vector2(x, screen_height - h)
-            self._velocity = Vector2(self._velocity.x, 0)

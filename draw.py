@@ -1,14 +1,13 @@
 import arcade
 from attrs import define
 import protocols as proto
+from mathematics.get_sprite_degrees import get_sprite_degrees
+from mathematics.vector import Vector2
+from player_draw import PlayerDraw
 
 
 @define
 class Draw:
-    def player(self, player: proto.Player, player_sprite: arcade.Sprite) -> None:
-        position = player.rigid_body.position
-        player_sprite.center_x = position.x - player.rigid_body.shape.x
-        player_sprite.center_y = position.y - player.rigid_body.shape.y
-        player_sprite_list = arcade.SpriteList()
-        player_sprite_list.append(player_sprite)
-        player_sprite_list.draw()
+    _player_draw: PlayerDraw
+    def player(self, mouse: Vector2) -> None:
+        self._player_draw.draw(mouse)

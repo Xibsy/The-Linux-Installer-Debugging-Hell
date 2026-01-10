@@ -15,6 +15,10 @@ class Player(ABC):
         ...
 
     @abstractmethod
+    def set_direction(self, direction: Vector2) -> None:
+        ...
+
+    @abstractmethod
     def update(self, dt: float) -> None:
         ...
 
@@ -28,19 +32,6 @@ class RigidBody(ABC):
     @property
     @abstractmethod
     def velocity(self) -> Vector2:
-        ...
-
-    @property
-    @abstractmethod
-    def shape(self) -> Vector2:
-        ...
-
-    @abstractmethod
-    def is_contain(self, point: Vector2) -> bool:
-        ...
-
-    @abstractmethod
-    def is_collided_with(self, other: "RigidBody", _is_inner=False) -> bool:
         ...
 
     @abstractmethod
