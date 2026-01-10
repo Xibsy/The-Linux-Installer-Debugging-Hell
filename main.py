@@ -14,7 +14,8 @@ def main() -> None:
 
     engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(PlayerDraw(player)), player)
 
-    engine.player_inputer.keyboard_state_changed.subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys)))
+    (engine.player_inputer.keyboard_state_changed
+     .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys))))
 
     engine.run()
 

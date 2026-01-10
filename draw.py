@@ -1,7 +1,4 @@
-import arcade
 from attrs import define
-import protocols as proto
-from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2
 from player_draw import PlayerDraw
 

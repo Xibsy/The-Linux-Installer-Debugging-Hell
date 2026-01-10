@@ -1,7 +1,3 @@
-import random
-
-import arcade
-from arcade import schedule
 from arcade import SpriteList
 from attrs import define
 import protocols as proto
@@ -15,7 +11,7 @@ class PlayerDraw:
     _player: proto.Player
     _last_walk_sprite: int = 0
 
-    def switch_sprite(self, dt: float) -> None:
+    def switch_sprite(self) -> None:
         self._last_walk_sprite += 1
         if self._last_walk_sprite > 5:
             self._last_walk_sprite = 0
@@ -27,7 +23,7 @@ class PlayerDraw:
         sprite = const.PLAYER_WALK_SPRITES[0]
         if direction.length != 0:
            sprite = const.PLAYER_WALK_SPRITES[self._last_walk_sprite]
-           schedule(self.switch_sprite, 0.1)
+           self.switch_sprite()
         sprite.center_x = position.x
         sprite.center_y = position.y
         sprite.angle = get_sprite_degrees(*mouse.tuple, *position.tuple)
