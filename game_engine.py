@@ -1,5 +1,6 @@
 import arcade
 
+from camera import Camera
 from constants import WALK, PLAYER_WALK_ANIMATION
 from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2Int, Vector2
@@ -19,6 +20,8 @@ class GameEngine(arcade.Window):
         self.background_color = arcade.color.LIME_GREEN
         self._draw = draw
         self._player = player
+
+        self._camera = Camera(arcade.Camera2D(), self._player)
 
         self._player_inputer = PlayerInputer()
         self._enemy_list = enemy_list
@@ -46,9 +49,11 @@ class GameEngine(arcade.Window):
     def on_fixed_update(self, delta_time: float) -> None:
         self._player.update(delta_time)
         self._enemy_list.update(delta_time, self._player.rigid_body.position)
+        self._camera.update(delta_time)
 
     def on_draw(self) -> None:
         self.clear()
+        self._camera.camera.use()
         self._draw.player(Vector2(self._mouse_x, self._mouse_y))
         self._draw.enemy(self._player.rigid_body.position, self._enemy_list)
 
