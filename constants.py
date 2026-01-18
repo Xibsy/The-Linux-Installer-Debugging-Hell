@@ -1,26 +1,22 @@
-import arcade.math
+from animation import Animation
 from mathematics.vector import Vector2Int
+from sprite import Sprite
 
 TITLE = 'ROOT-EXECUTION'
 SCREEN_SHAPE = Vector2Int(1080, 720)
 
-MAX_SPEED = 900
+MAX_PLAYER_SPEED = 900
+MAX_ENEMY_SPEED = 450
 ACCELERATION = 1800
 
 DRAG_RATION = 5
 
-ide = arcade.Sprite('sprites/walk/ide.png')
-walk1 = arcade.Sprite('sprites/walk/walk1.png')
-walk2 = arcade.Sprite('sprites/walk/walk2.png')
-walk3 = arcade.Sprite('sprites/walk/walk3.png')
-walk4 = arcade.Sprite('sprites/walk/walk4.png')
-walk5 = arcade.Sprite('sprites/walk/walk5.png')
+PLAYER_WALK_ANIMATION = Animation.load('player_walk', 6, 1.5, 1.5)
+ENEMY_WALK_ANIMATION = Animation.load('enemy_walk', 6, 1.5, 1.5)
 
-PLAYER_WALK_SPRITES = arcade.SpriteList()
+PLAYER_IDE_SPRITE = Sprite.load_raw_image('player_ide.png', 1.5)
+ENEMY_IDE_SPRITE = Sprite.load_raw_image('enemy_ide.png', 1.5)
 
-PLAYER_WALK_SPRITES.append(ide)
-PLAYER_WALK_SPRITES.append(walk1)
-PLAYER_WALK_SPRITES.append(walk2)
-PLAYER_WALK_SPRITES.append(walk3)
-PLAYER_WALK_SPRITES.append(walk4)
-PLAYER_WALK_SPRITES.append(walk5)
+WALK = 'walk'
+IDE = 'ide'
+RUN = 'run'

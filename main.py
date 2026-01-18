@@ -1,21 +1,31 @@
+import math
+from math import cos
+
 import arcade
 
 import constants as const
+from enemy_draw import EnemyListDraw
 from player import Player
 from draw import Draw
-from mathematics.vector import Vector2
 from game_engine import GameEngine
 from player_draw import PlayerDraw
-from rigid_body import RigidBody
+from enemy_list import *
 
 
 def main() -> None:
-    player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(), const.MAX_SPEED))
+    player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(),
+                              const.MAX_PLAYER_SPEED, Vector2(48, 38)))
+    enemy_list = EnemyList()
 
-    engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(PlayerDraw(player)), player)
+    engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(PlayerDraw(player),
+                                                              EnemyListDraw()), player, enemy_list)
 
     (engine.player_inputer.keyboard_state_changed
-     .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys))))
+     .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.tests))))
+
+    engine.player_inputer.keyboard_state_changed.subscribe(lambda keys:
+                                                           enemy_list.spawn(Vector2.zero())
+                                                           if arcade.key.L in keys else None)
 
     engine.run()
 
@@ -25,7 +35,7 @@ def main() -> None:
 #    player.gun.try_shoot(player.rigid_body.position, direction)
 #
 #
-def _keys_to_player_direction(keys: set[int]) -> Vector2:
+def _keys_to_player_direction(keys: set[int], a: float) -> Vector2:
     d_is_pressed = arcade.key.D in keys
     a_is_pressed = arcade.key.A in keys
     w_is_pressed = arcade.key.W in keys

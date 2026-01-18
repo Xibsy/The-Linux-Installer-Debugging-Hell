@@ -1,4 +1,7 @@
 import arcade
+
+from constants import WALK, PLAYER_WALK_ANIMATION
+from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2Int, Vector2
 from draw import Draw
 import protocols as proto
@@ -10,17 +13,26 @@ class GameEngine(arcade.Window):
                  title: str,
                  screen_shape: Vector2Int,
                  draw: Draw,
-                 player: proto.Player) -> None:
+                 player: proto.Player,
+                 enemy_list: proto.EnemyList) -> None:
         super().__init__(screen_shape.x, screen_shape.y, title, vsync=True)
         self.background_color = arcade.color.LIME_GREEN
         self._draw = draw
         self._player = player
 
         self._player_inputer = PlayerInputer()
+        self._enemy_list = enemy_list
 
     @property
     def player_inputer(self) -> PlayerInputer:
         return self._player_inputer
+
+    @property
+    def tests(self) -> float:
+        player_position = self._player.rigid_body.position
+        mouse_position = Vector2(self._mouse_x, self._mouse_y)
+        answer = get_sprite_degrees(*mouse_position.tuple, *player_position.tuple)
+        return answer
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         self._player_inputer.register_press(symbol)
@@ -28,10 +40,15 @@ class GameEngine(arcade.Window):
     def on_key_release(self, symbol: int, modifiers: int) -> None:
         self._player_inputer.unregister_press(symbol)
 
+    def on_update(self, delta_time: float) -> None:
+        PLAYER_WALK_ANIMATION.update(delta_time)
+
     def on_fixed_update(self, delta_time: float) -> None:
         self._player.update(delta_time)
+        self._enemy_list.update(delta_time, self._player.rigid_body.position)
 
     def on_draw(self) -> None:
         self.clear()
         self._draw.player(Vector2(self._mouse_x, self._mouse_y))
+        self._draw.enemy(self._player.rigid_body.position, self._enemy_list)
 
