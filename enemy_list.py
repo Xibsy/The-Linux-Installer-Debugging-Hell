@@ -45,3 +45,6 @@ class EnemyList(proto.EnemyList):
     def _is_enemy_kill(self, enemy: proto.Enemy) -> bool:
         return enemy.health <= 0.0
 
+    def __iter__(self):
+        return iter(self.list)
+

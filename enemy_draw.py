@@ -13,7 +13,7 @@ class EnemyListDraw:
 
     def draw(self, player_position: Vector2, enemy_list: EnemyList) -> None:
         self._enemy_walk.has_ended.subscribe(lambda: self._enemy_walk.set_progress(0.))
-        for enemy in enemy_list.list:
+        for enemy in enemy_list:
             position = enemy.rigid_body.position
             direction = enemy.direction
             angle = get_sprite_degrees(*player_position.tuple, *position.tuple)

@@ -37,7 +37,6 @@ class RigidBody(proto.RigidBody):
         if new_velocity.length > self._max_speed:
             new_velocity = new_velocity.normalize * self._max_speed
         self._velocity = new_velocity
-
         self._position += self._velocity * dt
 
     def is_contain(self, point: Vector2) -> bool:
