@@ -1,7 +1,6 @@
 import arcade
 
 from camera import Camera
-from constants import WALK
 from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2Int, Vector2
 from draw import Draw

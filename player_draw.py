@@ -17,7 +17,7 @@ class PlayerDraw:
         self._player_walk.has_ended.subscribe(lambda: self._player_walk.set_progress(0.))
         position = self._player.rigid_body.position
         direction = self._player.direction
-        angle = get_sprite_degrees(*mouse.tuple, *position.tuple)
+        angle = get_sprite_degrees(*mouse.tuple, *(const.SCREEN_SHAPE.as_vector2 * .5).tuple)
         if direction.length != 0:
            animate = self._player_walk
            animate.current_frame.blit_at(position, angle - 90)

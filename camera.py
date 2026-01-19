@@ -4,9 +4,9 @@ import arcade
 import protocols as proto
 from mathematics.vector import Vector2
 
-MAX_DISTANCE_TO_PLAYER = 100
-FROM_CENTER_PLAYER_DELTA = Vector2(0, -30)
-POSITION_PREDICTION_TIME_DELTA = .2
+MAX_DISTANCE_TO_PLAYER = 5
+FROM_CENTER_PLAYER_DELTA = Vector2(0, -20)
+POSITION_PREDICTION_TIME_DELTA = .1
 
 
 @frozen
