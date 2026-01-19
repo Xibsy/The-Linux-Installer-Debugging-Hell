@@ -4,21 +4,30 @@ from math import cos
 import arcade
 
 import constants as const
+from animation import Animation
 from enemy_draw import EnemyListDraw
 from player import Player
 from draw import Draw
 from game_engine import GameEngine
 from player_draw import PlayerDraw
 from enemy_list import *
+from sprite import Sprite
 
 
 def main() -> None:
+    player_walk = Animation.load('player_walk', 6, 1.5, 1.5)
+    enemy_walk = Animation.load('enemy_walk', 6, 1.5, 1.5)
+
+    player_ide = Sprite.load_raw_image('player_ide.png', 1.5)
+    enemy_ide = Sprite.load_raw_image('enemy_ide.png', 1.5)
+
     player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(),
                               const.MAX_PLAYER_SPEED, Vector2(48, 38)))
     enemy_list = EnemyList()
 
-    engine = GameEngine(const.TITLE, const.SCREEN_SHAPE, Draw(PlayerDraw(player),
-                                                              EnemyListDraw()), player, enemy_list)
+    engine = GameEngine(const.TITLE, const.SCREEN_SHAPE,
+                        Draw(PlayerDraw(player, player_walk, player_ide), EnemyListDraw(enemy_walk, enemy_ide)),
+                        player, enemy_list, player_walk, enemy_walk)
 
     (engine.player_inputer.keyboard_state_changed
      .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.tests))))

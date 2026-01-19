@@ -1,7 +1,7 @@
 import arcade
 
 from camera import Camera
-from constants import WALK, PLAYER_WALK_ANIMATION
+from constants import WALK
 from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2Int, Vector2
 from draw import Draw
@@ -15,7 +15,9 @@ class GameEngine(arcade.Window):
                  screen_shape: Vector2Int,
                  draw: Draw,
                  player: proto.Player,
-                 enemy_list: proto.EnemyList) -> None:
+                 enemy_list: proto.EnemyList,
+                 player_walk: proto.Animation,
+                 enemy_walk: proto.Animation) -> None:
         super().__init__(screen_shape.x, screen_shape.y, title, vsync=True)
         self.background_color = arcade.color.LIME_GREEN
         self._draw = draw
@@ -25,6 +27,9 @@ class GameEngine(arcade.Window):
 
         self._player_inputer = PlayerInputer()
         self._enemy_list = enemy_list
+
+        self._player_walk = player_walk
+        self._enemy_walk = enemy_walk
 
     @property
     def player_inputer(self) -> PlayerInputer:
@@ -44,7 +49,8 @@ class GameEngine(arcade.Window):
         self._player_inputer.unregister_press(symbol)
 
     def on_update(self, delta_time: float) -> None:
-        PLAYER_WALK_ANIMATION.update(delta_time)
+        self._player_walk.update(delta_time)
+        self._enemy_walk.update(delta_time)
 
     def on_fixed_update(self, delta_time: float) -> None:
         self._player.update(delta_time)

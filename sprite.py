@@ -4,12 +4,13 @@ import arcade
 from attrs import frozen
 
 from mathematics.vector import Vector2Int, Vector2
+import protocols as proto
 
 SPRITES_FOLDER = Path("sprites")
 
 
 @frozen
-class Sprite:
+class Sprite(proto.Sprite):
     @classmethod
     def load_raw_image(cls, path: Path | str, shape: float = 1., pivot: Vector2Int = Vector2Int.zero()) -> "Sprite":
         path = SPRITES_FOLDER / path

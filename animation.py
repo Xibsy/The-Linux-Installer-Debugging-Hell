@@ -7,10 +7,11 @@ from attrs import define, field
 from sprite import Sprite, SPRITES_FOLDER
 from observer import Event, OnEventSubscriber
 from mathematics.vector import Vector2Int
+import protocols as proto
 
 
 @define
-class Animation:
+class Animation(proto.Animation):
     @classmethod
     def load(cls, folder: Path | str, frames_count: int, period: float, shape: float, pivot: Vector2Int = Vector2Int.zero()):
         folder = Path(folder)
