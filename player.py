@@ -1,6 +1,6 @@
 from attrs import define, field
 import protocols as proto
-from constants import ACCELERATION, MAX_PLAYER_SPEED, DRAG_RATION, WALK, IDE
+from constants import ACCELERATION, MAX_PLAYER_SPEED, DRAG_RATION
 from mathematics.vector import Vector2
 
 

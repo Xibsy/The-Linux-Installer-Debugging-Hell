@@ -43,7 +43,7 @@ class EnemyList(proto.EnemyList):
                 self.kill(enemy)
 
     def _is_enemy_kill(self, enemy: proto.Enemy) -> bool:
-        return enemy.health <= 0.0
+        return not ((0 <= enemy.rigid_body.position.x <= 2000) and (0 <= enemy.rigid_body.position.y <= 2000))
 
     def __iter__(self):
         return iter(self.list)
