@@ -1,12 +1,13 @@
 import arcade
 
+from bullet import Bullet
 from camera import Camera
 from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2Int, Vector2
 from draw import Draw
 import protocols as proto
 from player_inputer import PlayerInputer
-
+import time
 
 class GameEngine(arcade.Window):
     def __init__(self,
@@ -21,6 +22,7 @@ class GameEngine(arcade.Window):
         self.background_color = arcade.color.LIME_GREEN
         self._draw = draw
         self._player = player
+        self._bullets: list['Bullet'] = []
 
         self._camera = Camera(arcade.Camera2D(), self._player)
 
@@ -43,6 +45,18 @@ class GameEngine(arcade.Window):
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         self._player_inputer.register_press(symbol)
+
+        if symbol == arcade.key.KEY_1:
+            self._player.switch_weapon(1)
+        elif symbol == arcade.key.KEY_2:
+            self._player.switch_weapon(2)
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            current_time = time.time()
+            target = Vector2(x, y)
+            bullets = self._player.shoot(target, current_time)
+            self._bullets.extend(bullets)
 
     def on_key_release(self, symbol: int, modifiers: int) -> None:
         self._player_inputer.unregister_press(symbol)

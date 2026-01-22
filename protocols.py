@@ -6,6 +6,7 @@ import arcade
 
 from mathematics.vector import Vector2, Vector2Int
 from observer import OnEventSubscriber
+from bullet import Bullet
 
 
 class Player(ABC):
@@ -27,6 +28,11 @@ class Player(ABC):
     def update(self, dt: float) -> None:
         ...
 
+    def shoot(self, target: Vector2, time: float) -> list[Bullet]:
+        ...
+
+    def switch_weapon(self, weapon_id: int) -> None:
+        ...
 
 class RigidBody(ABC):
     @property
@@ -165,4 +171,29 @@ class Animation(ABC):
 
     @abstractmethod
     def update(self, dt: float) -> None:
+        ...
+
+
+class Weapon(ABC):
+    name: str
+    ammo: int
+    max_ammo: int
+    last_shot_time: float
+
+    @abstractmethod
+    def shoot(
+            self,
+            shooter_pos: Vector2,
+            shooter_shape: Vector2,
+            target_pos: Vector2,
+            current_time: float
+    ) -> list[Bullet]:
+        ...
+
+    @abstractmethod
+    def can_shoot(self, current_time: float) -> bool:
+        ...
+
+    @abstractmethod
+    def reload(self) -> None:
         ...

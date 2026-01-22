@@ -2,16 +2,19 @@ import math
 import random
 from abc import ABC, abstractmethod
 from mathematics.vector import Vector2
+from bullet import Bullet
+import arcade
 
 
 class Weapon(ABC):
-    def __init__(self, name: str, damage: float, fire_rate: float, ammo: int) -> None:
+    def __init__(self, name: str, damage: float, fire_rate: float, ammo: int, texture_path: str) -> None:
         self.name = name
         self.damage = damage
         self.fire_rate = fire_rate
         self.ammo = ammo
         self.max_ammo = ammo
         self.last_shot_time = 0.0
+        self.texture = arcade.load_texture(texture_path) if texture_path else None
 
     @abstractmethod
     def shoot(self, shooter_pos: Vector2, shooter_shape: Vector2, target_pos: Vector2, current_time: float) -> bool:
@@ -26,47 +29,61 @@ class Weapon(ABC):
 
 class RmRfShotgun(Weapon):
     def __init__(self) -> None:
-        super().__init__(name="rm -rf", damage=100.0, fire_rate=1.0, ammo=8)
+        super().__init__(name="rm -rf", damage=100.0, fire_rate=1.0, ammo=8, texture_path="path")
         self.spread_angle = 0.3
         self.range = 200.0
 
     def shoot(
-        self,
-        shooter_pos: Vector2,
-        shooter_shape: Vector2,
-        target_pos: Vector2,
-        current_time: float
-    ) -> bool:
-        if not self.can_shoot(current_time):
-            return False
+            self,
+            shooter_pos: Vector2,
+            shooter_shape: Vector2,
+            target_pos: Vector2,
+            current_time: float
+    ) -> list[Bullet]:
+        if (current_time - self.last_shot_time) < (1.0 / self.fire_rate) or self.ammo <= 0:
+            return []
 
         self.ammo -= 1
         self.last_shot_time = current_time
 
-        muzzle_pos = shooter_pos + Vector2(shooter_shape.x / 2, shooter_shape.y)
+        muzzle_pos = shooter_pos + Vector2(shooter_shape.x * 0.5, shooter_shape.y)
 
         direction = (target_pos - muzzle_pos).normalize
 
-        for _ in range(6):
-            angle_offset = random.uniform(-self.spread_angle, self.spread_angle)
+        bullets = []
+        pellet_count = 6
+        spread_angle = 0.3
+        bullet_speed = 600.0
+        knockback = 150.0
+        max_distance = 200.0
+
+        for _ in range(pellet_count):
+            angle_offset = random.uniform(-spread_angle, spread_angle)
+
             cos_a = math.cos(angle_offset)
             sin_a = math.sin(angle_offset)
-            dx = direction.x * cos_a - direction.y * sin_a
-            dy = direction.x * sin_a + direction.y * cos_a
-            bullet_dir = Vector2(dx, dy).normalize
+            rotated_x = direction.x * cos_a - direction.y * sin_a
+            rotated_y = direction.x * sin_a + direction.y * cos_a
+            pellet_dir = Vector2(rotated_x, rotated_y).normalize
 
-            self.spawn_bullet(muzzle_pos, bullet_dir, self.damage)
+            bullet = Bullet(
+                start_position=muzzle_pos,
+                direction=pellet_dir,
+                speed=bullet_speed,
+                damage=self.damage,
+                knockback=knockback,
+                max_distance=max_distance
+            )
+            bullets.append(bullet)
 
-        return True
-
-    def spawn_bullet(self, start: Vector2, direction: Vector2, damage: float) -> None:
-        pass
+        return bullets
 
 
 class GrepSniper(Weapon):
     def __init__(self) -> None:
-        super().__init__(name="grep -P", damage=150.0, fire_rate=0.5, ammo=5)
-        self.range = 1200.0
+        super().__init__(name="grep -P", damage=80.0, fire_rate=0.5, ammo=5, texture_path="path")
+        self.range = 1000.0
+        self.zoom_factor = 0.3
 
     def shoot(
         self,
@@ -74,20 +91,24 @@ class GrepSniper(Weapon):
         shooter_shape: Vector2,
         target_pos: Vector2,
         current_time: float
-    ) -> bool:
+    ) -> list[Bullet]:
         if not self.can_shoot(current_time):
-            return False
+            return []
 
         self.ammo -= 1
         self.last_shot_time = current_time
 
-        muzzle_pos = shooter_pos + Vector2(shooter_shape.x / 2, shooter_shape.y)
+        muzzle_pos = shooter_pos + Vector2(shooter_shape.x * 0.5, shooter_shape.y)
+
         direction = (target_pos - muzzle_pos).normalize
-        end_point = muzzle_pos + direction * self.range
 
-        self.spawn_bullet(muzzle_pos, end_point, self.damage)
+        bullet = Bullet(
+            start_position=muzzle_pos,
+            direction=direction,
+            speed=800.0,
+            damage=self.damage,
+            knockback=100.0,
+            max_distance=self.range
+        )
 
-        return True
-
-    def spawn_bullet(self, start: Vector2, end: Vector2, damage: float, is_critical: bool = False) -> None:
-        pass
+        return [bullet]
