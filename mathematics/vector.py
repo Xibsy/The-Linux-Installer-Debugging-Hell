@@ -97,6 +97,10 @@ class Vector2:
     def tuple(self) -> tuple[float, float]:
         return self.x, self.y
 
+    @property
+    def as_90(self) -> "Vector2":
+        return type(self)(self.y, -self.x)
+
     def with_x(self, x: float) -> "Vector2":
         return type(self)(x, self.y)
 

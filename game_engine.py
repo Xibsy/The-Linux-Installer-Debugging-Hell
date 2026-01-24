@@ -3,6 +3,7 @@ import arcade
 import player
 from bullet import Bullet
 from camera import Camera
+from constants import SCREEN_SHAPE
 from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2Int, Vector2
 from draw import Draw
@@ -38,11 +39,9 @@ class GameEngine(arcade.Window):
         return self._player_inputer
 
     @property
-    def tests(self) -> float:
-        player_position = self._player.rigid_body.position
+    def direction_to_mouse(self) -> Vector2:
         mouse_position = Vector2(self._mouse_x, self._mouse_y)
-        answer = get_sprite_degrees(*mouse_position.tuple, *player_position.tuple)
-        return answer
+        return mouse_position - SCREEN_SHAPE.as_vector2 * .5
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         self._player_inputer.on_key_press(symbol)

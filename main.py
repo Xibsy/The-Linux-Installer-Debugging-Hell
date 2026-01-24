@@ -30,7 +30,7 @@ def main() -> None:
                         player, enemy_list, player_walk, enemy_walk)
 
     (engine.player_inputer.keyboard_state_changed
-     .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.tests))))
+     .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.direction_to_mouse))))
 
     engine.player_inputer.keyboard_state_changed.subscribe(lambda keys:
                                                            enemy_list.spawn(Vector2.zero())
@@ -44,15 +44,17 @@ def main() -> None:
 #    player.gun.try_shoot(player.rigid_body.position, direction)
 #
 #
-def _keys_to_player_direction(keys: set[int], a: float) -> Vector2:
+def _keys_to_player_direction(keys: set[int], direction_to_mouse: Vector2) -> Vector2:
     d_is_pressed = arcade.key.D in keys
     a_is_pressed = arcade.key.A in keys
     w_is_pressed = arcade.key.W in keys
     s_is_pressed = arcade.key.S in keys
-    x = d_is_pressed - a_is_pressed
-    y = w_is_pressed - s_is_pressed
+    x = direction_to_mouse.as_90 * (d_is_pressed - a_is_pressed)
+    y = direction_to_mouse * (w_is_pressed - s_is_pressed)
+    c = x + y
 
-    direction = Vector2(x, y)
+
+    direction = c
 
     return direction.normalize if direction.length > 0 else direction
 
