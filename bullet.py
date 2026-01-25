@@ -46,9 +46,8 @@ class Bullet:
                 b_y1 > o_y2
         )
 
-    def check_hit(self, enemies: list) -> tuple[bool, object | None]:
-
+    def check_hit(self, enemies: list) -> tuple[bool, object]:
         for enemy in enemies:
             if self.intersects_aabb(enemy.position, enemy.shape):
                 return True, enemy
-        return False, None
+        return False
