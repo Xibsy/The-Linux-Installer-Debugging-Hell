@@ -181,13 +181,8 @@ class Weapon(ABC):
     last_shot_time: float
 
     @abstractmethod
-    def shoot(
-            self,
-            shooter_pos: Vector2,
-            shooter_shape: Vector2,
-            target_pos: Vector2,
-            current_time: float
-    ) -> list[Bullet]:
+    def shoot(self, shooter_pos: Vector2, shooter_shape: Vector2, target_pos: Vector2,
+              current_time: float) -> list[Bullet]:
         ...
 
     @abstractmethod
