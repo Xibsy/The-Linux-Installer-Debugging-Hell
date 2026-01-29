@@ -1,43 +1,52 @@
 from attrs import define
+from enemy_list import EnemyList
 from mathematics.vector import Vector2
+from player import Player
+from constants import ACCELERATION, MAX_PLAYER_SPEED
+import protocols as proto
+from rigid_body import RigidBody
 
 
 @define
 class Bullet:
+    _rigid_body: RigidBody
     _start_position: Vector2
     _direction: Vector2
-    _speed: float
     _damage: float
-    _knockback: float
     _max_distance: float
 
-    _current_distance: float = 0.0
-    _shape: Vector2 = Vector2(4.0, 4.0)
+    @property
+    def rigid_body(self) -> proto.RigidBody:
+        return self._rigid_body
 
     @property
-    def position(self) -> Vector2:
-        return self._start_position + self._direction * self._current_distance
+    def direction(self) -> Vector2:
+        return self._direction
 
     @property
     def damage(self) -> float:
         return self._damage
 
-    @property
-    def knockback(self) -> float:
-        return self._knockback
-
     def is_alive(self) -> bool:
-        return self._current_distance < self._max_distance
+        return self._direction.length <= self._max_distance
 
-    def update(self, dt: float) -> None:
-        self._current_distance += self._speed * dt
+    def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
+        acceleration = self._direction * ACCELERATION
+        self._rigid_body.update(acceleration, dt)
 
-    def intersects_aabb(self, other_pos: Vector2, other_shape: Vector2) -> bool:
-        b_x1, b_y1 = self.position.tuple
-        b_x2, b_y2 = b_x1 + self._shape.x, b_y1 + self._shape.y
+        velocity = self._rigid_body.velocity
+        if velocity.length > MAX_PLAYER_SPEED:
+            self._rigid_body.set_velocity(velocity.normalize * MAX_PLAYER_SPEED)
 
-        o_x1, o_y1 = other_pos.tuple
-        o_x2, o_y2 = o_x1 + other_shape.x, o_y1 + other_shape.y
+        self._check_enemy_hit(enemy_list)
+        self._check_player_hit(player)
+
+    def _intersects_aabb(self, other_rigid_boy: RigidBody) -> bool:
+        b_x1, b_y1 = self._rigid_body.position.tuple
+        b_x2, b_y2 = b_x1 + self._rigid_body.shape.x, b_y1 + self._rigid_body.shape.y
+
+        o_x1, o_y1 = other_rigid_boy.position.tuple
+        o_x2, o_y2 = o_x1 + other_rigid_boy.shape.x, o_y1 + other_rigid_boy.shape.y
 
         return not (
                 b_x2 < o_x1 or
@@ -46,8 +55,11 @@ class Bullet:
                 b_y1 > o_y2
         )
 
-    def check_hit(self, enemies: list) -> tuple[bool, object]:
-        for enemy in enemies:
-            if self.intersects_aabb(enemy.position, enemy.shape):
-                return True, enemy
-        return False
+    def _check_enemy_hit(self, enemy_list: EnemyList) -> None:
+        for enemy in enemy_list:
+            if self._intersects_aabb(enemy.rigid_body):
+                enemy.hit(self._damage)
+
+    def _check_player_hit(self, player: Player) -> None:
+        if self._intersects_aabb(player.rigid_body):
+            player.hit(self._damage)

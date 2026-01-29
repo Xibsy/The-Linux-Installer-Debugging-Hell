@@ -30,6 +30,9 @@ class Enemy(proto.Enemy):
     def set_health(self, health: float) -> None:
         self._health = health
 
+    def hit(self, health: float) -> None:
+        self._health -= health
+
     def update(self, dt: float, player_position: Vector2):
         acceleration = self._direction * ACCELERATION
         acceleration -= self._rigid_body.velocity * DRAG_RATION
@@ -39,8 +42,6 @@ class Enemy(proto.Enemy):
         if velocity.length > MAX_ENEMY_SPEED:
             self._rigid_body.set_velocity(velocity.normalize * MAX_ENEMY_SPEED)
 
-        direction = (player_position - self._rigid_body.position)
-
-        a = direction.length
+        direction = player_position - self._rigid_body.position
 
         self.set_direction(direction.normalize if direction.length >= 100 else Vector2.zero())
