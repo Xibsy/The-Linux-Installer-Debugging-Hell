@@ -9,9 +9,11 @@ from mathematics.vector import Vector2
 from rigid_body import RigidBody
 
 
-def _generate_position() -> Vector2:
-    x = random.randint(30, SCREEN_SHAPE.x - 30)
-    y = random.randint(51, SCREEN_SHAPE.y - 51)
+def _generate_position(spawner_position: Vector2) -> Vector2:
+    int_x = int(spawner_position.x)
+    int_y = int(spawner_position.y)
+    x = random.randint(int_x - 200, int_x + 200)
+    y = random.randint(int_y - 200, int_y + 200)
     return Vector2(x, y)
 
 
@@ -19,12 +21,8 @@ def _generate_position() -> Vector2:
 class EnemyList(proto.EnemyList):
     _enemy_list: list[proto.Enemy] = field(init=False, factory=list)
 
-    @property
-    def list(self) -> list[proto.Enemy]:
-        return self._enemy_list
-
-    def spawn(self, velocity: Vector2) -> None:
-        enemy = Enemy(RigidBody(_generate_position(), velocity, MAX_ENEMY_SPEED, Vector2(53, 31)))
+    def spawn(self, spawner_position: Vector2) -> None:
+        enemy = Enemy(RigidBody(_generate_position(spawner_position), Vector2.zero(), MAX_ENEMY_SPEED, Vector2(53, 31)))
         self._enemy_list.append(enemy)
 
     def kill(self, enemy: proto.Enemy) -> None:
@@ -43,8 +41,8 @@ class EnemyList(proto.EnemyList):
                 self.kill(enemy)
 
     def _is_enemy_kill(self, enemy: proto.Enemy) -> bool:
-        return not ((0 <= enemy.rigid_body.position.x <= 2000) and (0 <= enemy.rigid_body.position.y <= 2000))
+        return not True #((0 <= enemy.rigid_body.position.x <= 2000) and (0 <= enemy.rigid_body.position.y <= 2000))
 
     def __iter__(self):
-        return iter(self.list)
+        return iter(self._enemy_list)
 

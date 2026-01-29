@@ -6,7 +6,6 @@ import arcade
 
 from mathematics.vector import Vector2, Vector2Int
 from observer import OnEventSubscriber
-from bullet import Bullet
 
 
 class Player(ABC):
@@ -28,7 +27,7 @@ class Player(ABC):
     def update(self, dt: float) -> None:
         ...
 
-    def shoot(self, target: Vector2, time: float) -> list[Bullet]:
+    def shoot(self, target: Vector2, time: float) -> list["Bullet"]:
         ...
 
     def switch_weapon(self, weapon_id: int) -> None:
@@ -82,13 +81,9 @@ class Enemy(ABC):
         ...
 
 class EnemyList(ABC):
-    @property
-    @abstractmethod
-    def list(self) -> list[Enemy]:
-        ...
 
     @abstractmethod
-    def spawn(self, velocity: Vector2) -> None:
+    def spawn(self, spawner_position: Vector2) -> None:
         ...
 
     @abstractmethod
@@ -175,14 +170,9 @@ class Animation(ABC):
 
 
 class Weapon(ABC):
-    name: str
-    ammo: int
-    max_ammo: int
-    last_shot_time: float
-
     @abstractmethod
     def shoot(self, shooter_pos: Vector2, shooter_shape: Vector2, target_pos: Vector2,
-              current_time: float) -> list[Bullet]:
+              current_time: float) -> list["Bullet"]:
         ...
 
     @abstractmethod
@@ -191,4 +181,101 @@ class Weapon(ABC):
 
     @abstractmethod
     def reload(self) -> None:
+        ...
+
+class Spawner(ABC):
+    @property
+    @abstractmethod
+    def enemy_list(self) -> EnemyList:
+        ...
+
+    @abstractmethod
+    def spawn(self) -> None:
+        ...
+
+    @abstractmethod
+    def update(self, dt: float, player_position: Vector2) -> None:
+        ...
+
+class Bullet(ABC):
+
+    @property
+    @abstractmethod
+    def rigid_body(self) -> RigidBody:
+        ...
+
+    @property
+    @abstractmethod
+    def direction(self) -> Vector2:
+        ...
+
+    @property
+    @abstractmethod
+    def damage(self) -> float:
+        ...
+
+    @property
+    @abstractmethod
+    def max_distance(self) -> float:
+        ...
+
+    @abstractmethod
+    def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
+        ...
+
+    @abstractmethod
+    def _intersects_aabb(self, other_rigid_boy: RigidBody) -> bool:
+        ...
+
+    @abstractmethod
+    def _check_enemy_hit(self, enemy_list: EnemyList) -> None:
+        ...
+
+    @abstractmethod
+    def _check_player_hit(self, player: Player) -> None:
+        ...
+
+class Bullets(ABC):
+    @abstractmethod
+    def spawn(self, direction: Vector2) -> None:
+        ...
+
+    @abstractmethod
+    def kill(self, bullet: Bullet) -> None:
+        ...
+
+    @abstractmethod
+    def apply(self, function: Callable[[Bullet], None]) -> None:
+        ...
+
+    @abstractmethod
+    def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
+        ...
+
+    @abstractmethod
+    def _is_alive(self, bullet: Bullet) -> bool:
+        ...
+
+    @abstractmethod
+    def __iter__(self):
+        ...
+
+
+class GrepSniper(ABC):
+    @property
+    @abstractmethod
+    def owner(self) -> Enemy | Player:
+        ...
+
+    @property
+    @abstractmethod
+    def bullets(self) -> Bullets:
+        ...
+
+    @abstractmethod
+    def try_shoot(self, bullet_direction: Vector2) -> None:
+        ...
+
+    @abstractmethod
+    def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
         ...

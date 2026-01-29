@@ -10,7 +10,6 @@ from rigid_body import RigidBody
 @define
 class Bullet:
     _rigid_body: RigidBody
-    _start_position: Vector2
     _direction: Vector2
     _damage: float
     _max_distance: float
@@ -27,8 +26,9 @@ class Bullet:
     def damage(self) -> float:
         return self._damage
 
-    def is_alive(self) -> bool:
-        return self._direction.length <= self._max_distance
+    @property
+    def max_distance(self) -> float:
+        return self._max_distance
 
     def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
         acceleration = self._direction * ACCELERATION

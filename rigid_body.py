@@ -32,18 +32,6 @@ class RigidBody(proto.RigidBody):
             velocity = velocity.normalize * self._max_speed
         self._velocity = velocity
 
-    def update(self, acceleration: Vector2, dt: float) -> None:
-        new_velocity = self._velocity + acceleration * dt
-        if new_velocity.length > self._max_speed:
-            new_velocity = new_velocity.normalize * self._max_speed
-        self._velocity = new_velocity
-        self._position += self._velocity * dt
-
-    def is_contain(self, point: Vector2) -> bool:
-        x, y = self._position.tuple
-        w, h = self._shape.tuple
-        return (x <= point.x <= x + w) and (y <= point.y <= y + h)
-
     def constrain_to_screen(self, screen_width: float, screen_height: float) -> None:
         x, y = self._position.tuple
         w, h = self._shape.tuple
@@ -61,3 +49,32 @@ class RigidBody(proto.RigidBody):
         elif y + h > screen_height:
             self._position = Vector2(x, screen_height - h)
             self._velocity = Vector2(self._velocity.x, 0)
+
+    def is_contain(self, point: Vector2) -> bool:
+        x, y = self.position.tuple
+        width, height = self.shape.tuple
+        return ((x <= point.x <= x + width) and
+                (y <= point.y <= y + height))
+
+    def is_collided_with(self, other: "RigidBody", _is_inner=False) -> bool:
+        x, y = self.position.tuple
+        width, height = self.shape.tuple
+        corners = [
+            Vector2(x, y),
+            Vector2(x + width, y),
+            Vector2(x, y + height),
+            Vector2(x + width, y + height),
+        ]
+        result = any(other.is_contain(point) for point in corners)
+        if result:
+            return True
+        if not _is_inner:
+            return other.is_collided_with(self, _is_inner=True)
+        return False
+
+    def update(self, acceleration: Vector2, dt: float) -> None:
+        new_velocity = self._velocity + acceleration * dt
+        if new_velocity.length > self._max_speed:
+            new_velocity = new_velocity.normalize * self._max_speed
+        self._velocity = new_velocity
+        self._position += self._velocity * dt

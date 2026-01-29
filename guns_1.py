@@ -1,9 +1,12 @@
 import math
 import random
 from abc import ABC, abstractmethod
+
+from constants import SCREEN_SHAPE
 from mathematics.vector import Vector2
-from bullet import Bullet
+from guns.bullet import Bullet
 import arcade
+from rigid_body import RigidBody
 
 
 class Weapon(ABC):
@@ -87,13 +90,12 @@ class GrepSniper(Weapon):
 
     def shoot(
         self,
-        shooter_pos: Vector2,
-        shooter_shape: Vector2,
+        shoter_rigid_body: RigidBody,
         target_pos: Vector2,
         current_time: float
-    ) -> list[Bullet]:
+    ) -> Bullet | None:
         if not self.can_shoot(current_time):
-            return []
+            return None
 
         self.ammo -= 1
         self.last_shot_time = current_time
@@ -102,13 +104,7 @@ class GrepSniper(Weapon):
 
         direction = (target_pos - muzzle_pos).normalize
 
-        bullet = Bullet(
-            start_position=muzzle_pos,
-            direction=direction,
-            speed=800.0,
-            damage=self.damage,
-            knockback=100.0,
-            max_distance=self.range
-        )
+        bullet = Bullet(RigidBody(SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(), 200, Vector2(10, 10)),
+                        direction, 100, 1250)
 
-        return [bullet]
+        return bullet

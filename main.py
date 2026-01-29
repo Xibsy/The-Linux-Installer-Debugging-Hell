@@ -6,11 +6,13 @@ import arcade
 import constants as const
 from animation import Animation
 from enemy_draw import EnemyListDraw
+from guns.grep_sniper import GrepSniper
 from player import Player
 from draw import Draw
 from game_engine import GameEngine
 from player_draw import PlayerDraw
 from enemy_list import *
+from spawner import Spawner
 from sprite import Sprite
 
 
@@ -25,25 +27,28 @@ def main() -> None:
                               const.MAX_PLAYER_SPEED, Vector2(48, 38)))
     enemy_list = EnemyList()
 
+    gun = GrepSniper(player)
+
+    test_spawner = Spawner(Vector2(100, 100), 1.5)
+
     engine = GameEngine(const.TITLE, const.SCREEN_SHAPE,
                         Draw(PlayerDraw(player, player_walk, player_ide), EnemyListDraw(enemy_walk, enemy_ide)),
-                        player, enemy_list, player_walk, enemy_walk)
+                        player, gun, enemy_list, player_walk, enemy_walk, test_spawner)
 
     (engine.player_inputer.keyboard_state_changed
      .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.direction_to_mouse))))
 
-    engine.player_inputer.keyboard_state_changed.subscribe(lambda keys:
-                                                           enemy_list.spawn(Vector2.zero())
-                                                           if arcade.key.L in keys else None)
+    engine.player_inputer.mouse_clicked.subscribe(lambda pos: _on_mouse_click(pos, gun))
 
     engine.run()
 
 
-#def _on_mouse_click(position: Vector2, player: Player) -> None:
-#    direction = (position - player.rigid_body.position).normalize
-#    player.gun.try_shoot(player.rigid_body.position, direction)
-#
-#
+def _on_mouse_click(position: Vector2, gun: GrepSniper) -> None:
+    direction = (position - const.SCREEN_SHAPE.as_vector2 * .5).normalize
+
+    gun.try_shoot(direction)
+
+
 def _keys_to_player_direction(keys: set[int], direction_to_mouse: Vector2) -> Vector2:
     d_is_pressed = arcade.key.D in keys
     a_is_pressed = arcade.key.A in keys
