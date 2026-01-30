@@ -20,8 +20,8 @@ class GrepSniper:
     def bullets(self) -> proto.Bullets:
         return self._bullets
 
-    def try_shoot(self, bullet_direction: Vector2) -> None:
-        self._bullets.spawn(bullet_direction)
+    def try_shoot(self, bullet_direction: Vector2, player_pos: Vector2) -> None:
+        self._bullets.spawn(bullet_direction, player_pos)
 
     def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player) -> None:
         self._bullets.update(dt, enemy_list, player)

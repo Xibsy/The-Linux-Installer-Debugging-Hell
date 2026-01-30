@@ -21,4 +21,4 @@ class Draw:
 
     def bullets(self, bullets: Bullets) -> None:
         for bullet in bullets:
-            arcade.draw_circle_filled(*bullet.rigid_body.position, 10, arcade.color.BLACK)
+            arcade.draw_circle_filled(*bullet.rigid_body.position.tuple, 10, arcade.color.BLACK)
