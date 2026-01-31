@@ -44,6 +44,19 @@ class RigidBody(ABC):
     def velocity(self) -> Vector2:
         ...
 
+    @property
+    @abstractmethod
+    def shape(self) -> Vector2:
+        ...
+
+    @abstractmethod
+    def is_contain(self, point: Vector2) -> bool:
+        ...
+
+    @abstractmethod
+    def is_collided_with(self, other: "RigidBody") -> bool:
+        ...
+
     @abstractmethod
     def set_position(self, position: Vector2) -> None:
         ...
@@ -53,8 +66,10 @@ class RigidBody(ABC):
         ...
 
     @abstractmethod
-    def update(self, acceleration: Vector2, dt: float) -> None:
+    def update(self, drag_ratio: float, acceleration: Vector2, dt: float) -> None:
         ...
+
+
 
 class Enemy(ABC):
     @property
@@ -290,4 +305,28 @@ class GrepSniper(ABC):
 
     @abstractmethod
     def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
+        ...
+
+
+class Platform(ABC):
+    @property
+    @abstractmethod
+    def rigid_body(self) -> RigidBody:
+        ...
+
+    @abstractmethod
+    def update(self, dt: float) -> None:
+        ...
+
+class Platforms(ABC):
+    @abstractmethod
+    def get_touched(self, other: RigidBody) -> Platform | None:
+        ...
+
+    @abstractmethod
+    def update(self, dt: float) -> None:
+        ...
+
+    @abstractmethod
+    def apply(self, function: Callable[[Platform], None]) -> None:
         ...

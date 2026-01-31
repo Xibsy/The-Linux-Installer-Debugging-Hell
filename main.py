@@ -14,6 +14,8 @@ from player_draw import PlayerDraw
 from enemy_list import *
 from spawner import Spawner
 from sprite import Sprite
+from platforms import Platforms
+from platform import Platform
 
 
 def main() -> None:
