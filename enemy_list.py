@@ -23,8 +23,9 @@ class EnemyList(proto.EnemyList):
     _enemy_list: list[proto.Enemy] = field(init=False, factory=list)
 
     def spawn(self, spawner_position: Vector2) -> None:
-        enemy = Enemy(RigidBody(_generate_position(spawner_position), Vector2.zero(), MAX_ENEMY_SPEED, Vector2(53, 31)))
+        enemy = Enemy(RigidBody(_generate_position(spawner_position), Vector2.zero(), MAX_ENEMY_SPEED, Vector2(60, 60)))
         enemy.set_gun(GrepSniper(enemy))
+        a = enemy.gun.owner
         self._enemy_list.append(enemy)
 
     def kill(self, enemy: proto.Enemy) -> None:

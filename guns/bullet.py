@@ -3,6 +3,7 @@ from mathematics.vector import Vector2
 from constants import ACCELERATION, MAX_PLAYER_SPEED
 import protocols as proto
 from rigid_body import RigidBody
+from player import Player
 
 
 @define
@@ -11,6 +12,7 @@ class Bullet:
     _direction: Vector2
     _damage: float
     _max_distance: float
+    _start_position: Vector2
 
     @property
     def rigid_body(self) -> proto.RigidBody:
@@ -28,7 +30,12 @@ class Bullet:
     def max_distance(self) -> float:
         return self._max_distance
 
-    def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player) -> None:
+    @property
+    def start_position(self) -> Vector2:
+        return self._start_position
+
+    def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player,
+               owner: proto.Enemy | proto.Player) -> None:
         acceleration = self._direction * ACCELERATION
         self._rigid_body.update(acceleration, dt)
 
@@ -36,8 +43,12 @@ class Bullet:
         if velocity.length > MAX_PLAYER_SPEED:
             self._rigid_body.set_velocity(velocity.normalize * MAX_PLAYER_SPEED)
 
-        self._check_enemy_hit(enemy_list)
-        self._check_player_hit(player)
+        types = type(owner)
+        if type(owner) == Player:
+            self._check_enemy_hit(enemy_list)
+        else:
+            self._check_player_hit(player)
+
 
     def _intersects_aabb(self, other_rigid_boy: RigidBody) -> bool:
         b_x1, b_y1 = self._rigid_body.position.tuple

@@ -15,7 +15,7 @@ class Bullets:
 
     def spawn(self, direction: Vector2, owner_pos: Vector2) -> None:
         bullet = Bullet(RigidBody(owner_pos, Vector2(10, 10), 200, Vector2(6, 6)),
-                        direction, 100, 1250)
+                        direction, 100, 1250, owner_pos)
         self._bullets.append(bullet)
 
     def kill(self, bullet: proto.Bullet) -> None:
@@ -27,14 +27,17 @@ class Bullets:
         for bullet in self._bullets:
             function(bullet)
 
-    def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player) -> None:
+    def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player,
+               owner: proto.Player | proto.Enemy) -> None:
         for bullet in self._bullets:
-            bullet.update(dt, enemy_list, player)
-            if self._is_alive(bullet):
+            bullet.update(dt, enemy_list, player, owner, self)
+            if self._is_alive(bullet) and bullet in self._bullets:
                 self.kill(bullet)
 
-    def _is_alive(self, bullet: proto.Bullet) -> bool:
-        return bullet.direction.length >= bullet.max_distance
+    @staticmethod
+    def _is_alive(bullet: proto.Bullet) -> bool:
+        road = bullet.rigid_body.position - bullet.start_position
+        return road.length >= bullet.max_distance
 
     def __iter__(self):
         return iter(self._bullets)

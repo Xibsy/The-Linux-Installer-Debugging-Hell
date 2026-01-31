@@ -66,7 +66,8 @@ class GameEngine(arcade.Window):
     def on_draw(self) -> None:
         self.clear()
         self._camera.camera.use()
+        self._draw.bullets(self._gun.bullets)
         self._draw.player(Vector2(self._mouse_x, self._mouse_y))
         self._draw.enemy(self._player.rigid_body.position, self._spawner.enemy_list)
-        self._draw.bullets(self._gun.bullets)
+
 

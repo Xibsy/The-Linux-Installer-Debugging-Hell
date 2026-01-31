@@ -66,7 +66,7 @@ class RigidBody(ABC):
         ...
 
     @abstractmethod
-    def update(self, drag_ratio: float, acceleration: Vector2, dt: float) -> None:
+    def update(self, acceleration: Vector2, dt: float) -> None:
         ...
 
 
@@ -247,7 +247,8 @@ class Bullet(ABC):
         ...
 
     @abstractmethod
-    def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
+    def update(self, dt: float, enemy_list: EnemyList, player: Player,
+               owner: Enemy | Player, bullets: "Bullets") -> None:
         ...
 
     @abstractmethod

@@ -15,7 +15,7 @@ from enemy_list import *
 from spawner import Spawner
 from sprite import Sprite
 from platforms import Platforms
-from platform import Platform
+from platform_ import Platform
 
 
 def main() -> None:

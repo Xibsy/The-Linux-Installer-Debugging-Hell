@@ -53,5 +53,6 @@ class Enemy(proto.Enemy):
 
         direction = player.rigid_body.position - self._rigid_body.position
 
-        self.set_direction(direction.normalize if direction.length >= 100 else Vector2.zero())
-        self._gun.try_shoot(direction) if direction.length < 100 else None
+        self.set_direction(direction.normalize if direction.length >= 200 else Vector2.zero())
+        if direction.length < 200:
+            self._gun.try_shoot(direction.normalize)
