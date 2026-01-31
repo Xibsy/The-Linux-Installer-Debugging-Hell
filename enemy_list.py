@@ -5,6 +5,7 @@ from attrs import frozen, field
 import protocols as proto
 from constants import SCREEN_SHAPE, MAX_ENEMY_SPEED
 from enemy import Enemy
+from guns.grep_sniper import GrepSniper
 from mathematics.vector import Vector2
 from rigid_body import RigidBody
 
@@ -23,6 +24,7 @@ class EnemyList(proto.EnemyList):
 
     def spawn(self, spawner_position: Vector2) -> None:
         enemy = Enemy(RigidBody(_generate_position(spawner_position), Vector2.zero(), MAX_ENEMY_SPEED, Vector2(53, 31)))
+        enemy.set_gun(GrepSniper(enemy))
         self._enemy_list.append(enemy)
 
     def kill(self, enemy: proto.Enemy) -> None:
@@ -34,14 +36,14 @@ class EnemyList(proto.EnemyList):
         for enemy in self._enemy_list:
             function(enemy)
 
-    def update(self, dt: float, player_position: Vector2) -> None:
+    def update(self, dt: float, player: proto.Player) -> None:
         for enemy in self._enemy_list:
-            enemy.update(dt, player_position)
+            enemy.update(dt, self, player)
             if self._is_enemy_kill(enemy):
                 self.kill(enemy)
 
     def _is_enemy_kill(self, enemy: proto.Enemy) -> bool:
-        return not True #((0 <= enemy.rigid_body.position.x <= 2000) and (0 <= enemy.rigid_body.position.y <= 2000))
+        return enemy.health <= 0
 
     def __iter__(self):
         return iter(self._enemy_list)

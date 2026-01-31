@@ -38,15 +38,15 @@ def main() -> None:
     (engine.player_inputer.keyboard_state_changed
      .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.direction_to_mouse))))
 
-    engine.player_inputer.mouse_clicked.subscribe(lambda pos: _on_mouse_click(pos, gun, player))
+    engine.player_inputer.mouse_clicked.subscribe(lambda pos: _on_mouse_click(pos, gun))
 
     engine.run()
 
 
-def _on_mouse_click(position: Vector2, gun: GrepSniper, player: Player) -> None:
+def _on_mouse_click(position: Vector2, gun: GrepSniper) -> None:
     direction = (position - const.SCREEN_SHAPE.as_vector2 * .5).normalize
 
-    gun.try_shoot(direction, player.rigid_body.position)
+    gun.try_shoot(direction)
 
 
 def _keys_to_player_direction(keys: set[int], direction_to_mouse: Vector2) -> Vector2:

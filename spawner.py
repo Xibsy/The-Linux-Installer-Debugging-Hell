@@ -21,8 +21,8 @@ class Spawner(proto.Spawner):
         for _ in range(random_enemy_count()):
             self._enemy_list.spawn(self._position)
 
-    def update(self, dt: float, player_position: Vector2)-> None:
-        self._enemy_list.update(dt, player_position)
+    def update(self, dt: float, player: proto.Player)-> None:
+        self._enemy_list.update(dt, player)
         self._last_use += dt
         if self._last_use <= self._period:
             return

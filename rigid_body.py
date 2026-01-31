@@ -1,5 +1,3 @@
-# from mathematics.mathematics import sign
-
 from attrs import define
 from mathematics.vector import Vector2
 import protocols as proto

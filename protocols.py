@@ -72,16 +72,24 @@ class Enemy(ABC):
     def health(self) -> float:
         ...
 
+    @property
+    @abstractmethod
+    def gun(self) -> 'GrepSniper':
+        ...
+
+    @abstractmethod
+    def set_gun(self, gun: "GrepSniper") -> None:
+        ...
+
     @abstractmethod
     def set_direction(self, direction: Vector2) -> None:
         ...
 
     @abstractmethod
-    def update(self, dt: float, player_position: Vector2):
+    def update(self, dt: float, enemy_list: "EnemyList", player: Player) -> None:
         ...
 
 class EnemyList(ABC):
-
     @abstractmethod
     def spawn(self, spawner_position: Vector2) -> None:
         ...
@@ -100,6 +108,10 @@ class EnemyList(ABC):
 
     @abstractmethod
     def _is_enemy_kill(self, enemy: Enemy) -> bool:
+        ...
+
+    @abstractmethod
+    def __iter__(self):
         ...
 
 
@@ -194,7 +206,7 @@ class Spawner(ABC):
         ...
 
     @abstractmethod
-    def update(self, dt: float, player_position: Vector2) -> None:
+    def update(self, dt: float, player: Player) -> None:
         ...
 
 class Bullet(ABC):
@@ -237,7 +249,7 @@ class Bullet(ABC):
 
 class Bullets(ABC):
     @abstractmethod
-    def spawn(self, direction: Vector2) -> None:
+    def spawn(self, direction: Vector2, player_pos: Vector2) -> None:
         ...
 
     @abstractmethod
@@ -273,7 +285,7 @@ class GrepSniper(ABC):
         ...
 
     @abstractmethod
-    def try_shoot(self, bullet_direction: Vector2) -> None:
+    def try_shoot(self, bullet_direction: Vector2, player_pos: Vector2) -> None:
         ...
 
     @abstractmethod

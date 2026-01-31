@@ -1,7 +1,5 @@
 from attrs import define
-from enemy_list import EnemyList
 from mathematics.vector import Vector2
-from player import Player
 from constants import ACCELERATION, MAX_PLAYER_SPEED
 import protocols as proto
 from rigid_body import RigidBody
@@ -30,7 +28,7 @@ class Bullet:
     def max_distance(self) -> float:
         return self._max_distance
 
-    def update(self, dt: float, enemy_list: EnemyList, player: Player) -> None:
+    def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player) -> None:
         acceleration = self._direction * ACCELERATION
         self._rigid_body.update(acceleration, dt)
 
@@ -55,11 +53,11 @@ class Bullet:
                 b_y1 > o_y2
         )
 
-    def _check_enemy_hit(self, enemy_list: EnemyList) -> None:
+    def _check_enemy_hit(self, enemy_list: proto.EnemyList) -> None:
         for enemy in enemy_list:
             if self._intersects_aabb(enemy.rigid_body):
                 enemy.hit(self._damage)
 
-    def _check_player_hit(self, player: Player) -> None:
+    def _check_player_hit(self, player: proto.Player) -> None:
         if self._intersects_aabb(player.rigid_body):
             player.hit(self._damage)

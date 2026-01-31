@@ -13,8 +13,8 @@ from rigid_body import RigidBody
 class Bullets:
     _bullets: list[proto.Bullet] = field(init=False, factory=list)
 
-    def spawn(self, direction: Vector2, player_pos: Vector2) -> None:
-        bullet = Bullet(RigidBody(player_pos, Vector2(10, 10), 200, Vector2(10, 10)),
+    def spawn(self, direction: Vector2, owner_pos: Vector2) -> None:
+        bullet = Bullet(RigidBody(owner_pos, Vector2(10, 10), 200, Vector2(6, 6)),
                         direction, 100, 1250)
         self._bullets.append(bullet)
 
@@ -34,7 +34,7 @@ class Bullets:
                 self.kill(bullet)
 
     def _is_alive(self, bullet: proto.Bullet) -> bool:
-        return bullet.direction.length > bullet.max_distance
+        return bullet.direction.length >= bullet.max_distance
 
     def __iter__(self):
         return iter(self._bullets)

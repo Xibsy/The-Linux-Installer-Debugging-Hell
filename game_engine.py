@@ -59,7 +59,7 @@ class GameEngine(arcade.Window):
 
     def on_fixed_update(self, delta_time: float) -> None:
         self._player.update(delta_time)
-        self._spawner.update(delta_time, self._player.rigid_body.position)
+        self._spawner.update(delta_time, self._player)
         self._camera.update(delta_time)
         self._gun.update(delta_time, self._spawner.enemy_list, self._player)
 
