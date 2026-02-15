@@ -3,9 +3,9 @@ from typing import Callable
 
 from attrs import frozen, field
 import protocols as proto
-from constants import SCREEN_SHAPE, MAX_ENEMY_SPEED
+from constants import MAX_ENEMY_SPEED
 from enemy import Enemy
-from guns.grep_sniper import GrepSniper
+from guns.enemy_piston import EnemyPiston
 from mathematics.vector import Vector2
 from rigid_body import RigidBody
 
@@ -24,8 +24,7 @@ class EnemyList(proto.EnemyList):
 
     def spawn(self, spawner_position: Vector2) -> None:
         enemy = Enemy(RigidBody(_generate_position(spawner_position), Vector2.zero(), MAX_ENEMY_SPEED, Vector2(60, 60)))
-        enemy.set_gun(GrepSniper(enemy))
-        a = enemy.gun.owner
+        enemy.set_gun(EnemyPiston(enemy))
         self._enemy_list.append(enemy)
 
     def kill(self, enemy: proto.Enemy) -> None:
@@ -39,7 +38,7 @@ class EnemyList(proto.EnemyList):
 
     def update(self, dt: float, player: proto.Player) -> None:
         for enemy in self._enemy_list:
-            enemy.update(dt, self, player)
+            enemy.update(dt, player)
             if self._is_enemy_kill(enemy):
                 self.kill(enemy)
 

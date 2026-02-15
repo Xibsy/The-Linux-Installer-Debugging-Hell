@@ -4,7 +4,6 @@ import protocols as proto
 from enemy_list import EnemyList
 from mathematics.get_sprite_degrees import get_sprite_degrees
 from mathematics.vector import Vector2
-import constants as const
 
 
 @define

@@ -8,6 +8,7 @@ from mathematics.vector import Vector2
 class Player(proto.Player):
     _rigid_body: proto.RigidBody
     _direction: Vector2 = field(init=False, default=Vector2.zero())
+    _gun: proto.PlayerGrepSniper | None = None
     _state: str = field(init=False, default=str)
     _health: float = field(init=False, default=100.0)
 
@@ -23,6 +24,10 @@ class Player(proto.Player):
     def health(self) -> float:
         return self._health
 
+    @property
+    def gun(self) -> proto.PlayerGrepSniper | None:
+        return self._gun
+
     def set_direction(self, direction: Vector2) -> None:
         assert direction.length <= 1.00001
         self._direction = direction
@@ -30,13 +35,17 @@ class Player(proto.Player):
     def set_health(self, health: float) -> None:
         self._health = health
 
+    def set_gun(self, gun: proto.PlayerGrepSniper) -> None:
+        self._gun = gun
+
     def hit(self, health: float) -> None:
         self._health -= health
 
-    def update(self, dt: float):
+    def update(self, dt: float, enemy_list: proto.EnemyList) -> None:
         acceleration = self._direction * ACCELERATION
         acceleration -= self._rigid_body.velocity * DRAG_RATION
         self._rigid_body.update(acceleration, dt)
+        self._gun.update(dt, enemy_list)
 
         velocity = self._rigid_body.velocity
         if velocity.length > MAX_PLAYER_SPEED:

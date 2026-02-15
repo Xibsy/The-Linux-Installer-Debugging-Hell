@@ -2,14 +2,14 @@ from attrs import define, field
 
 import protocols as proto
 from constants import ACCELERATION, DRAG_RATION, MAX_ENEMY_SPEED
-from guns.grep_sniper import GrepSniper
+from guns.enemy_piston import EnemyPiston
 from mathematics.vector import Vector2
 
 
 @define
 class Enemy(proto.Enemy):
     _rigid_body: proto.RigidBody
-    _gun: GrepSniper | None = None
+    _gun: EnemyPiston | None = None
     _direction: Vector2 = field(init=False, default=Vector2.zero())
     _health: float = field(init=False, default=100.0)
 
@@ -26,10 +26,10 @@ class Enemy(proto.Enemy):
         return self._health
 
     @property
-    def gun(self) -> GrepSniper | None:
+    def gun(self) -> EnemyPiston | None:
         return self._gun
 
-    def set_gun(self, gun: GrepSniper) -> None:
+    def set_gun(self, gun: EnemyPiston) -> None:
         self._gun = gun
 
     def set_direction(self, direction: Vector2) -> None:
@@ -42,10 +42,11 @@ class Enemy(proto.Enemy):
     def hit(self, health: float) -> None:
         self._health -= health
 
-    def update(self, dt: float, enemy_list: proto.EnemyList, player: proto.Player) -> None:
+    def update(self, dt: float, player: proto.Player) -> None:
         acceleration = self._direction * ACCELERATION
         acceleration -= self._rigid_body.velocity * DRAG_RATION
         self._rigid_body.update(acceleration, dt)
+        self._gun.update(dt, player)
 
         velocity = self._rigid_body.velocity
         if velocity.length > MAX_ENEMY_SPEED:
