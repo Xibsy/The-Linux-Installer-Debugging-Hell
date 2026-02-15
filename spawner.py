@@ -40,4 +40,3 @@ class Spawner(proto.Spawner):
 
         self._last_use = 0
         self.spawn()
-        print(self._spawns_enemies)

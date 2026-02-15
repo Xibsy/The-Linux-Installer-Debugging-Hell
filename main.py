@@ -20,6 +20,8 @@ def main() -> None:
     player_ide = Sprite.load_raw_image('player_ide.png', 1.5)
     enemy_ide = Sprite.load_raw_image('enemy_ide.png', 1.5)
 
+    wall = Sprite.load_raw_image('wall.png', 1)
+
     player = Player(RigidBody(const.SCREEN_SHAPE.as_vector2 * .5, Vector2.zero(),
                               const.MAX_PLAYER_SPEED, Vector2(48, 38)))
     gun = PlayerGrepSniper(player)
@@ -29,7 +31,7 @@ def main() -> None:
 
     engine = GameEngine(const.TITLE, const.SCREEN_SHAPE,
                         Draw(PlayerDraw(player, player_walk, player_ide), EnemyListDraw(enemy_walk, enemy_ide)),
-                        player, player_walk, enemy_walk, spawner_list)
+                        player, player_walk, enemy_walk, spawner_list, wall)
 
     (engine.player_inputer.keyboard_state_changed
      .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.direction_to_mouse))))

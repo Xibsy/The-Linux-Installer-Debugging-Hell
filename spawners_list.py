@@ -15,7 +15,6 @@ class SpawnersList:
 
     def spawn(self) -> None:
         bullet = Spawner(random_spawner_position(), random_spawner_period())
-        print(bullet)
         self._spawners.append(bullet)
 
     def kill(self, spawner: proto.Spawner) -> None:

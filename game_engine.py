@@ -17,7 +17,8 @@ class GameEngine(arcade.Window):
                  player: proto.Player,
                  player_walk: proto.Animation,
                  enemy_walk: proto.Animation,
-                 spawners_list: SpawnersList) -> None:
+                 spawners_list: SpawnersList,
+                 wall: proto.Sprite) -> None:
         super().__init__(screen_shape.x, screen_shape.y, title, vsync=True)
         self.background_color = arcade.color.LIME_GREEN
         self._draw = draw
@@ -29,6 +30,7 @@ class GameEngine(arcade.Window):
 
         self._player_walk = player_walk
         self._enemy_walk = enemy_walk
+        self._wall = wall
         self._spawners_list = spawners_list
 
     @property
@@ -60,6 +62,8 @@ class GameEngine(arcade.Window):
 
     def on_draw(self) -> None:
         self.clear()
+
+        self._draw.wall(self._wall)
         self._camera.camera.use()
         self._draw.player(Vector2(self._mouse_x, self._mouse_y))
         self._draw.spawners_list(self._spawners_list, self._player.rigid_body.position)
