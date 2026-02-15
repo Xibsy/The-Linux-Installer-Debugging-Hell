@@ -2,6 +2,7 @@ from attrs import define, field
 import protocols as proto
 from constants import ACCELERATION, MAX_PLAYER_SPEED, DRAG_RATION
 from mathematics.vector import Vector2
+from spawners_list import SpawnersList
 
 
 @define
@@ -41,11 +42,12 @@ class Player(proto.Player):
     def hit(self, health: float) -> None:
         self._health -= health
 
-    def update(self, dt: float, enemy_list: proto.EnemyList) -> None:
+    def update(self, dt: float, spawners_list: SpawnersList) -> None:
         acceleration = self._direction * ACCELERATION
         acceleration -= self._rigid_body.velocity * DRAG_RATION
         self._rigid_body.update(acceleration, dt)
-        self._gun.update(dt, enemy_list)
+        for spawner in spawners_list:
+            self._gun.update(dt, spawner.enemy_list)
 
         velocity = self._rigid_body.velocity
         if velocity.length > MAX_PLAYER_SPEED:

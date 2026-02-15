@@ -8,7 +8,7 @@ from draw import Draw
 from game_engine import GameEngine
 from player_draw import PlayerDraw
 from enemy_list import *
-from spawner import Spawner
+from spawners_list import SpawnersList
 from sprite import Sprite
 from guns.player_grep_sniper import PlayerGrepSniper
 
@@ -24,14 +24,12 @@ def main() -> None:
                               const.MAX_PLAYER_SPEED, Vector2(48, 38)))
     gun = PlayerGrepSniper(player)
     player.set_gun(gun)
-
-    enemy_list = EnemyList()
-
-    test_spawner = Spawner(Vector2(100, 100), 1.5)
+    spawner_list = SpawnersList()
+    spawner_list.spawn()
 
     engine = GameEngine(const.TITLE, const.SCREEN_SHAPE,
                         Draw(PlayerDraw(player, player_walk, player_ide), EnemyListDraw(enemy_walk, enemy_ide)),
-                        player, enemy_list, player_walk, enemy_walk, test_spawner)
+                        player, player_walk, enemy_walk, spawner_list)
 
     (engine.player_inputer.keyboard_state_changed
      .subscribe(lambda keys: player.set_direction(_keys_to_player_direction(keys, engine.direction_to_mouse))))
@@ -64,4 +62,3 @@ def _keys_to_player_direction(keys: set[int], direction_to_mouse: Vector2) -> Ve
 
 if __name__ == "__main__":
     main()
-

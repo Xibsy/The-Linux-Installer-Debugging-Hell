@@ -117,7 +117,7 @@ class EnemyList(ABC):
         ...
 
     @abstractmethod
-    def update(self, dt: float, player_position: Vector2) -> None:
+    def update(self, dt: float, player_position: Vector2, is_limit_off: bool) -> None:
         ...
 
     @abstractmethod

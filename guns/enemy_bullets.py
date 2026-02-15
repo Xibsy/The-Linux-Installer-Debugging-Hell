@@ -13,7 +13,7 @@ class EnemyBullets:
     _bullets: list[proto.EnemyBullet] = field(init=False, factory=list)
 
     def spawn(self, direction: Vector2, owner_pos: Vector2) -> None:
-        bullet = EnemyBullet(RigidBody(owner_pos, Vector2(10, 10), 200, Vector2(6, 6)),
+        bullet = EnemyBullet(RigidBody(owner_pos, Vector2(0.0001, 0.0001), 200, Vector2(6, 6)),
                         direction, 100, 1250, owner_pos)
         self._bullets.append(bullet)
 
