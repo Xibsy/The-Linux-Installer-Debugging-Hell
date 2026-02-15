@@ -1,0 +1,56 @@
+import random
+from typing import Callable
+
+from attrs import define, field
+import protocols as proto
+from constants import MAX_ENEMY_SPEED
+from enemy import Enemy
+from guns.enemy_piston import EnemyPiston
+from mathematics.vector import Vector2
+from rigid_body import RigidBody
+
+
+def _generate_position(spawner_position: Vector2) -> Vector2:
+    int_x = int(spawner_position.x)
+    int_y = int(spawner_position.y)
+    x = random.randint(int_x - 200, int_x + 200)
+    y = random.randint(int_y - 200, int_y + 200)
+    return Vector2(x, y)
+
+
+@define
+class EnemyList(proto.EnemyList):
+    _enemy_list: list[proto.Enemy] = field(init=False, factory=list)
+    _is_limit_off: bool = False
+
+    @property
+    def enemy_count(self) -> int:
+        return len(self._enemy_list) if not self._is_limit_off else -1
+
+    def spawn(self, spawner_position: Vector2) -> None:
+        enemy = Enemy(RigidBody(_generate_position(spawner_position), Vector2.zero(), MAX_ENEMY_SPEED, Vector2(60, 60)))
+        enemy.set_gun(EnemyPiston(enemy))
+        self._enemy_list.append(enemy)
+
+    def kill(self, enemy: proto.Enemy) -> None:
+        assert enemy in self._enemy_list
+
+        self._enemy_list.remove(enemy)
+
+    def apply(self, function: Callable[[proto.Enemy], None]) -> None:
+        for enemy in self._enemy_list:
+            function(enemy)
+
+    def update(self, dt: float, player: proto.Player, is_limit_off: bool) -> None:
+        for enemy in self._enemy_list:
+            enemy.update(dt, player)
+            if self._is_enemy_kill(enemy):
+                self.kill(enemy)
+        self._is_limit_off = is_limit_off
+
+    def _is_enemy_kill(self, enemy: proto.Enemy) -> bool:
+        return enemy.health <= 0
+
+    def __iter__(self):
+        return iter(self._enemy_list)
+

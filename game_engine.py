@@ -1,0 +1,72 @@
+import arcade
+
+from camera import Camera
+from constants import SCREEN_SHAPE
+from mathematics.vector import Vector2Int, Vector2
+from draw import Draw
+import protocols as proto
+from player_inputer import PlayerInputer
+from spawners_list import SpawnersList
+
+
+class GameEngine(arcade.Window):
+    def __init__(self,
+                 title: str,
+                 screen_shape: Vector2Int,
+                 draw: Draw,
+                 player: proto.Player,
+                 player_walk: proto.Animation,
+                 enemy_walk: proto.Animation,
+                 spawners_list: SpawnersList,
+                 wall: proto.Sprite) -> None:
+        super().__init__(screen_shape.x, screen_shape.y, title, vsync=True)
+        self.background_color = arcade.color.LIME_GREEN
+        self._draw = draw
+        self._player = player
+
+        self._camera = Camera(arcade.Camera2D(), self._player)
+
+        self._player_inputer = PlayerInputer()
+
+        self._player_walk = player_walk
+        self._enemy_walk = enemy_walk
+        self._wall = wall
+        self._spawners_list = spawners_list
+
+    @property
+    def player_inputer(self) -> PlayerInputer:
+        return self._player_inputer
+
+    @property
+    def direction_to_mouse(self) -> Vector2:
+        mouse_position = Vector2(self._mouse_x, self._mouse_y)
+        return mouse_position - SCREEN_SHAPE.as_vector2 * .5
+
+    def on_key_press(self, symbol: int, modifiers: int) -> None:
+        self._player_inputer.on_press(symbol)
+
+    def on_key_release(self, symbol: int, modifiers: int) -> None:
+        self._player_inputer.on_release(symbol)
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
+        self._player_inputer.on_mouse_press(x, y, button)
+
+    def on_update(self, delta_time: float) -> None:
+        self._player_walk.update(delta_time)
+        self._enemy_walk.update(delta_time)
+
+    def on_fixed_update(self, delta_time: float) -> None:
+        self._player.update(delta_time, self._spawners_list)
+        self._spawners_list.update(delta_time, self._player)
+        self._camera.update(delta_time)
+
+    def on_draw(self) -> None:
+        self.clear()
+
+        self._draw.wall(self._wall)
+        self._camera.camera.use()
+        self._draw.player(Vector2(self._mouse_x, self._mouse_y))
+        self._draw.spawners_list(self._spawners_list, self._player.rigid_body.position)
+        self._draw.bullets(self._player.gun.bullets)
+
+

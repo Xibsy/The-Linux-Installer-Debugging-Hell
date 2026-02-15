@@ -1,50 +1,243 @@
-## 🌌 Лор: Проект «ROOT-EXECUTION»
+## The Linux Installer: Debugging Hell
 
-В недалеком будущем человечество перенесло свое сознание в глобальную сеть **Omni-OS**. Это гигантская операционная система, управляющая городами, климатом и жизнями людей.
+### 🎮 Обновленная концепция
 
-Вы играете за **Kernel-Slayer** (Ликвидатор Ядра) — элитную антивирусную программу с самосознанием. Произошла катастрофа: неизвестный «Нулевой Пациент» внедрил в систему зашифрованный червь-вымогатель, который начал переписывать реальность. Сектора памяти превращаются в кошмары, а системные утилиты сошли с ума и стали монстрами.
-
-Твоя задача: пробиться из пользовательских папок (`/home/user`) в самое сердце системы — директорию `/root`, чтобы выполнить команду полной очистки и перезагрузить мир.
+**Главный твист:** Весь этот хаос — не случайность. За всеми багами, ошибками и системными сбоями стоит сам **Линус Бенедикт Торвальдс**, который решил проверить, достоин ли игрок называться настоящим системным администратором. Это его личный тест на прочность.
 
 ---
 
-## 🛠️ Структура уровней (Директории)
+## 📖 ОБНОВЛЕННЫЙ ЛОР
 
-Игра разбита на «Дистрибутивы» (акты), каждый из которых состоит из уровней-директорий.
+**Пролог:**
+Ты получил письмо на email с темой "Re: Your Linux contribution". Внутри — загадочное сообщение от самого Линуса Торвальдса: *"So you think you can handle Linux? Let's see how you deal with REAL problems. I've deployed every nightmare scenario I've seen in 30 years of kernel development. Install the system if you can. - Linus"*
 
-### Акт I: Поверхность (Директория `/home` и `/media`)
+Открыв вложение, твоя система мгновенно рухнула. Теперь ты заперт внутри поврежденной файловой системы, и единственный выход — пройти через все круги debugging hell и доказать своё мастерство.
 
-* **Сеттинг:** Уютные кибер-квартиры, заваленные цифровым мусором, фотографиями и логами.
-* **Геймплей:** Обучение. Сражения с мелкими багами и «спам-ботами».
-* **Босс уровня:** `Trojan.Photo.exe` — огромный монстр-перевертыш, маскирующийся под элементы декора.
-
-### Акт II: Библиотечный ад (Директория `/usr/lib` и `/bin`)
-
-* **Сеттинг:** Бесконечные архивы, ряды полок с кодом, летающие бинарные данные.
-* **Геймплей:** Здесь хранятся «исполняемые файлы» (оружие). Чтобы открыть дверь, нужно найти «зависимости» (ключи).
-* **Враги:** Ошибки сегментации (`Segfault`), которые телепортируются и разрывают пространство.
-
-### Акт III: Железный цех (Директория `/dev` и `/mnt`)
-
-* **Сеттинг:** Индустриальная зона, где софт встречается с железом. Поршни, искры, потоки данных.
-* **Геймплей:** Уровни с ловушками. Нужно взаимодействовать с «драйверами», чтобы изменять гравитацию или температуру.
-* **Босс уровня:** `Kernel Panic` — воплощенный хаос, меняющий геометрию уровня прямо во время боя.
-
-### Акт IV: Сердце Тьмы (Директория `/etc` и `/boot`)
-
-* **Сеттинг:** Сюрреалистичное пространство, состоящее из чистых конфигов и скриптов инициализации.
-* **Геймплей:** Финальный рывок. Мало патронов, много сильных врагов.
-* **Финал:** Доступ к терминалу в `/root`.
+**По мере прохождения** игрок находит разбросанные по уровням фрагменты легендарных email-ответов Линуса с его знаменитыми ругательствами и критикой плохого кода. Они служат подсказками и мотивацией.
 
 ---
 
-## 🔫 Механики и "Фишки"
+## 🗺️ СТРУКТУРА УРОВНЕЙ (обновленная)
 
-* **Оружие как команды:**
-* `rm -rf`: Твой верный дробовик, стирающий врагов из реальности.
-* `grep`: Снайперская винтовка, подсвечивающая уязвимые места.
-* `sudo`: Режим берсерка (ульта), дающий временную неуязвимость и огромный урон.
+### **Tutorial: /home/newbie - "Learn to Walk"**
+Остается без изменений, но в конце появляется сообщение в терминале:
+```
+> Nice start. But this was just kindergarten. - L.T.
+```
 
+---
 
-* **Здоровье:** Измеряется в процентах свободной оперативной памяти (RAM). Если она забьется «мусором» от попаданий врагов — система зависнет (Game Over).
-* **Секреты:** Спрятанные `.config` файлы, которые улучшают характеристики персонажа.
+### **Level 1: /boot - "GRUB Nightmare"**
+**Дополнение:** В конце уровня находишь email:
+```
+Subject: Re: GRUB not booting
+"Maybe if you actually READ THE DOCUMENTATION instead of 
+randomly trying commands, you wouldn't have this problem."
+```
+
+---
+
+### **Level 2: /etc - "Configuration Hell"**
+**Дополнение:** Случайные конфиг-файлы содержат комментарии в стиле Линуса:
+```
+# This is the WRONG way to do it, but here we are
+# Thanks to whoever thought this was a good idea *sarcasm*
+```
+
+---
+
+### **Level 3: /usr - "Compiler Carnage"**
+**Дополнение:** Ошибки компиляции содержат пасхалки на реальные flame wars из mailing lists. Босс Compiler Error Dragon цитирует знаменитое:
+```
+"Talk is cheap. Show me the code."
+```
+
+---
+
+### **Level 4: /var - "Log Apocalypse"**
+**Дополнение:** В логах спрятано сообщение:
+```
+[ERROR] Linus says: "I'm not a nice person, and I don't care 
+about you. I care about the KERNEL."
+```
+
+---
+
+### **Level 5: /dev - "Hardware Hell"**
+**Дополнение:** Device Not Found враги шепчут фразы:
+```
+"NVIDIA, f**k you!" (отсылка к легендарному выступлению)
+```
+
+---
+
+### **Level 6: /proc - "Process Pandemonium"**
+**Дополнение:** Fork Bomb враги размножаются под крики:
+```
+"I hope this doesn't become another systemd situation..."
+```
+
+---
+
+### **Level 7: /lib - "Dependency Dungeon"**
+**Дополнение:** На стенах написаны цитаты:
+```
+"If you need more than 3 levels of dependency, 
+you're doing something wrong."
+```
+
+---
+
+### **Final Level: / - "The Root of All Evil"**
+
+Путь к финальному боссу усеян мемориалами великих багов Linux истории:
+- Памятник "Year 2038 Problem"
+- Статуя "Dirty COW"
+- Монумент "Heartbleed"
+
+**Предфинальная катсцена:**
+Достигая корневой директории, игрок находит файл `README_FROM_LINUS.txt`:
+
+```
+So you made it this far. Impressive.
+But can you handle me?
+
+I've seen thousands of contributors come and go.
+I've rejected more patches than you've written lines of code.
+I've yelled at people smarter than you.
+
+Now it's YOUR turn.
+
+Show me you deserve to call yourself a Linux user.
+
+- Linus Benedict Torvalds
+  Creator of Linux
+  Creator of Git
+  Creator of your problems
+```
+
+---
+
+## 👑 ФИНАЛЬНЫЙ БОСС: Linus Benedict Torvalds
+
+### Внешний вид:
+- Пиксельная версия Линуса в легендарной позе с поднятым средним пальцем (отсылка к NVIDIA)
+- Окружен вихрем из C code и git commits
+- За спиной логотипы Linux penguin и Git
+- В руках держит легендарную клавиатуру, с которой написал первый коммит ядра
+
+### Механика боя:
+
+**ФАЗА 1: "Code Review Hell"**
+```
+Linus: "Let me see your code..."
+```
+- Атака: **Flame Mail** — летящие гневные email сообщения с критикой
+- Атака: **Rejected Patch** — отклоненные патчи падают как метеориты
+- Атака: **"RTFM!"** — призывает волну Documentation Not Read ошибок
+- Механика: Нужно собрать правильную команду, избегая его критики
+
+**ФАЗА 2: "Git Merge Conflict"**
+```
+Linus: "You don't understand version control, do you?"
+```
+- Арена превращается в git репозиторий
+- Атака: **Merge Hell** — конфликтующие ветки создают лабиринт
+- Атака: **Force Push** — отбрасывает игрока назад
+- Атака: **Rebase Rewrite** — переписывает историю, меняя расположение платформ
+- Механика: Нужно использовать `git merge` и `git rebase` для навигации
+
+**ФАЗА 3: "Kernel Panic Supreme"**
+```
+Linus: "Now you face the REAL kernel!"
+```
+- Сам Линус превращается в живое ядро Linux
+- Атака: **System Call Storm** — град системных вызовов
+- Атака: **IRQ Interrupt** — прерывания, замораживающие игрока
+- Атака: **Segmentation Fault** — разделяет арену на недоступные сегменты
+- Атака: **NULL Pointer** — призывает пустоту, засасывающую игрока
+- Механика: Нужно собрать ultimate команду: `sudo make -j$(nproc) && sudo make install`
+
+**ФИНАЛЬНАЯ ФАЗА: "The Torvalds Test"**
+```
+Linus: "Fine. You know the commands. But do you understand the PHILOSOPHY?"
+```
+- Линус останавливается и задает философские вопросы:
+  - "Why is open source important?"
+  - "Why do we say 'GNU/Linux'?"
+  - "What makes good code?"
+- Игрок должен выбрать ответы, собирая слова в команды
+- Неправильные ответы = атака гневом Торвальдса
+- Правильные ответы = его уважение растет
+
+---
+
+## 🏆 КОНЦОВКА
+
+### Если победил:
+Линус медленно аплодирует:
+
+```
+Linus: "Huh. Not bad. You actually understand this stuff.
+       Maybe you're not completely hopeless after all.
+       
+       Welcome to the club. Here's your root access.
+       
+       Don't f**k it up."
+
+[SYSTEM REBOOTING...]
+[ALL CHECKS PASSED]
+[WELCOME TO LINUX]
+
+> You are now root.
+```
+
+Финальный экран показывает:
+- Твоё имя в `/etc/passwd`
+- Твой commit в ядре Linux (шуточный)
+- Благодарность от Tux (пингвина)
+- "Congratulations! You survived Debugging Hell!"
+
+### Post-credits scene:
+Экран терминала, на котором появляется новое письмо:
+
+```
+From: torvalds@linux-foundation.org
+Subject: Re: You passed
+
+"I lied. There's no real test. The real Linux experience 
+is figuring things out when everything's broken.
+
+You did that. Good job.
+
+Now go contribute something useful.
+
+P.S. - If you ever write code like systemd, I will 
+personally hunt you down.
+
+- Linus"
+```
+
+---
+
+## 🎨 Дополнительные пасхалки
+
+**Секретные коллекционные items:**
+- 🐧 **Tux Plushies** — разбросаны по уровням
+- 📧 **Historic Emails** — реальные легендарные письма Линуса
+- 💾 **Linux 0.01 Floppy** — первая версия ядра
+- ⌨️ **Linus's Keyboard** — его легендарная клавиатура
+- 🖕 **NVIDIA Gesture Frame** — та самая фотография
+
+**Easter Eggs:**
+- Секретная комната с портретами contributors Linux
+- Мини-игра "Git Simulator" внутри игры
+- Возможность найти исходный код Linux 0.01
+- Камео других легенд: Richard Stallman, Andrew Morton, Greg Kroah-Hartman
+
+**New Game+:**
+После победы разблокируется "Gentoo Mode" — hardcore режим, где нужно компилировать всё из исходников в реальном времени. И Линус становится в 2 раза агрессивнее.
+
+---
+
+Эта версия превращает игру в любовное письмо Linux-сообществу с юмором и уважением к легендарной личности Линуса! 🐧
